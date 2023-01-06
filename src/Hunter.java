@@ -33,11 +33,11 @@ public class Hunter
         }
         else if (treasure == "")
         {
-            System.out.println("You went treasure hunting and found nothing...");
+            System.out.println("You found nothing.");
         }
         else if (treasure != null)
         {
-            System.out.println("You went treasure hunting and found " + treasure);
+            System.out.println("You found " + treasure);
             addItem(treasure);
         }
         else
@@ -48,7 +48,7 @@ public class Hunter
 
     public boolean hasAllTreasure()
     {
-        return hasItemInKit("Diamond") && hasItemInKit("Gold") && hasItemInKit("Jewelery");
+        return hasItemInKit("Ruby") && hasItemInKit("Emerald") && hasItemInKit("Diamond");
     }
     //Accessors
     public String getHunterName()

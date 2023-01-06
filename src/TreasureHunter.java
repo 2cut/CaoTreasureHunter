@@ -14,6 +14,7 @@ public class TreasureHunter
     private Hunter hunter;
     private boolean hardMode;
     private boolean easyMode;
+    private boolean cheatMode;
 
     //Constructor
     /**
@@ -26,6 +27,7 @@ public class TreasureHunter
         hunter = null;
         hardMode = false;
         easyMode = false;
+        cheatMode = false;
     }
 
     // starts the game; this is the only public method
@@ -48,17 +50,14 @@ public class TreasureHunter
         String name = scanner.nextLine();
 
         // set hunter instance variable
-        if (easyMode)
-        {
-            hunter = new Hunter(name, 20);
-        }
-        else
-        {
-            hunter = new Hunter(name, 10);
-        }
+
 
         System.out.println("Hard mode? (y/n): ");
         String hard = scanner.nextLine();
+        if (hard.equals("cheat"))
+        {
+            cheatMode = true;
+        }
         if (hard.equals("y") || hard.equals("Y")) {
             hardMode = true;
         } else {
@@ -68,7 +67,15 @@ public class TreasureHunter
                 easyMode = true;
             }
         }
+        if (easyMode)
+        {
+            hunter = new Hunter(name, 20);
+        }
+        else {
+            hunter = new Hunter(name, 10);
+        }
     }
+
     /**
      * Creates a new town and adds the Hunter to it.
      */
@@ -92,12 +99,12 @@ public class TreasureHunter
         // note that we don't need to access the Shop object
         // outside of this method, so it isn't necessary to store it as an instance
         // variable; we can leave it as a local variable
-        Shop shop = new Shop(markdown, easyMode);
+        Shop shop = new Shop(markdown, easyMode, cheatMode);
 
         // creating the new Town -- which we need to store as an instance
         // variable in this class, since we need to access the Town
         // object in other methods of this class
-        currentTown = new Town(shop, toughness);
+        currentTown = new Town(shop, toughness, cheatMode);
 
         // calling the hunterArrives method, which takes the Hunter
         // as a parameter; note this also could have been done in the
@@ -116,13 +123,14 @@ public class TreasureHunter
         Scanner scanner = new Scanner(System.in);
         String choice = "";
 
-        while (!(choice.equals("X") || choice.equals("x")))
+        while (!choice.equals("x") && !hunter.hasAllTreasure() && hunter.getGold() > 0)
         {
             System.out.println();
             System.out.println(currentTown.getLatestNews());
             System.out.println("***");
             System.out.println(hunter);
             System.out.println(currentTown);
+            System.out.println("(H)unt for treasure");
             System.out.println("(B)uy something at the shop.");
             System.out.println("(S)ell something at the shop.");
             System.out.println("(M)ove on to a different town.");
@@ -133,7 +141,17 @@ public class TreasureHunter
             choice = scanner.nextLine();
             processChoice(choice);
         }
+        if (hunter.hasAllTreasure())
+        {
+            System.out.println("Well done fellow adventurer! You've collected all 3 precious treasures meaning you won the game!!");
+        }
+        else if (hunter.getGold() <= 0)
+        {
+            System.out.println("Tough luck, you lost all your money. Game Over.");
+        }
     }
+
+
 
     /**
      * Takes the choice received from the menu and calls the appropriate method to carry out the instructions.
@@ -144,6 +162,10 @@ public class TreasureHunter
         if (choice.equals("B") || choice.equals("b") || choice.equals("S") || choice.equals("s"))
         {
             currentTown.enterShop(choice);
+        } else if (choice.equals("h"))
+        {
+            String treasure = currentTown.searchForTreasure();
+            hunter.treasureHunt(treasure);
         }
         else if (choice.equals("M") || choice.equals("m"))
         {
@@ -156,7 +178,7 @@ public class TreasureHunter
         }
         else if (choice.equals("L") || choice.equals("l"))
         {
-            currentTown.lookForTrouble();
+            currentTown.lookForTrouble(easyMode);
         }
         else if (choice.equals("X") || choice.equals("x"))
         {

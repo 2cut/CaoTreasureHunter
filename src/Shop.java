@@ -13,17 +13,21 @@ public class Shop
     private static final int MACHETE_COST = 6;
     private static final int HORSE_COST = 12;
     private static final int BOAT_COST = 20;
+    private static final int GLIDER_COST = 24;
+    private static final int CHEATMODE_COST = 1;
 
     // instance variables
     private double markdown;
     private Hunter customer;
     private boolean easyMode;
+    private boolean cheatMode;
 
     //Constructor
-    public Shop(double markdown, boolean easyMode)
+    public Shop(double markdown, boolean easyMode, boolean cheatMode)
     {
         this.markdown = markdown;
         this.easyMode = easyMode;
+        this.cheatMode = cheatMode;
         customer = null;
     }
 
@@ -88,12 +92,12 @@ public class Shop
      */
     public String inventory()
     {
-        String str = "- Water (" + getCostOfItem("water") + " gold)\n";
-        str += "- Rope (" + getCostOfItem("rope") + " gold)\n";
-        str += "- Machete (" + getCostOfItem("machete") + " gold)\n";
-        str += "- Torch (" + getCostOfItem("torch") + " gold)\n";
-        str += "- Horse (" + getCostOfItem("horse") + " gold)\n";
-        str += "- Boat (" + getCostOfItem("boat") + " gold)\n";
+        String str = "=-= Water (" + getCostOfItem("water") + " gold) =-=\n";
+        str += "=-= Rope (" + getCostOfItem("rope") + " gold) =-=\n";
+        str += "=-= Machete (" + getCostOfItem("machete") + " gold) =-=\n";
+        str += "=-= Horse (" + getCostOfItem("horse") + " gold) =-=\n";
+        str += "=-= Boat (" + getCostOfItem("boat") + " gold) =-=\n";
+        str += "=-= Glider (" + getCostOfItem("glider") +" gold =-=\n";
 
         return str;
     }
@@ -178,7 +182,9 @@ public class Shop
         else if (item.equals("boat"))
         {
             cost = BOAT_COST;
-        }
+        } else if (item.equals("glider")) {
+            cost = GLIDER_COST;
+         }
         else
         {
             cost = 0;
